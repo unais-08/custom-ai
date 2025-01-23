@@ -57,7 +57,7 @@ const DashboardPage = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
         <div className="text-center mb-8">
           <img
-            src="/logo.png"
+            src="/primary-logo.webp"
             alt="AI Assistant Logo"
             className="w-20 h-20 mx-auto mb-4 filter brightness-125"
           />

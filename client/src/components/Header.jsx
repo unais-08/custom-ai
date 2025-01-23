@@ -14,9 +14,9 @@ const Header = () => {
           aria-label="Home"
         >
           <img
-            src="/logo.png"
+            src="/primary-logo.webp"
             alt="Custom AI Logo"
-            className="w-8 h-8 transition-transform group-hover:scale-110"
+            className="w-9 h-9 transition-transform group-hover:scale-110"
           />
           <span className="text-lg bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             Custom AI
