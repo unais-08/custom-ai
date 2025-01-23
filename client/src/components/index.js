@@ -1,2 +1,3 @@
 import ChatList from "./ChatList";
-export { ChatList };
+import ChatSidebar from "./ChatSidebar";
+export { ChatList, ChatSidebar };

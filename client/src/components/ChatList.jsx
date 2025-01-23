@@ -42,7 +42,7 @@ const ChatList = () => {
       </div>
 
       {/* Account Section */}
-      <div className="mt-auto border-t border-gray-800 pt-4">
+      <div className=" border-t border-gray-800 ">
         <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-800/50 transition-colors cursor-pointer">
           <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
             <span className="text-sm">U</span>
