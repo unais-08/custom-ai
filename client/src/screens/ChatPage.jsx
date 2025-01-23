@@ -1,16 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, React } from "react";
 import { useParams } from "react-router-dom";
+import model from "../libs/gemini";
+import { Conversation } from "../components";
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { initialMessage } = useParams();
-
-  // Ref for the chat container
   const chatContainerRef = useRef(null);
 
-  // Function to scroll to the bottom of the chat
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -18,80 +17,96 @@ const ChatPage = () => {
     }
   };
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  // Initialize chat with initial message (if provided)
   useEffect(() => {
     if (initialMessage) {
       const decodedMessage = decodeURIComponent(initialMessage);
-      setMessages([{ role: "user", content: decodedMessage }]);
+      handleInitialMessage(decodedMessage);
     }
   }, [initialMessage]);
 
+  const handleInitialMessage = async (message) => {
+    const userMessage = { role: "user", content: message };
+    setMessages([userMessage]);
+    await generateAIResponse(message);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!input.trim()) return;
 
-    // Add user message
     const userMessage = { role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    // Simulate AI response
-    setIsLoading(true);
-    setTimeout(() => {
-      const aiMessage = { role: "assistant", content: `Response to: ${input}` };
-      setMessages((prev) => [...prev, aiMessage]);
-      setIsLoading(false);
-    }, 1000);
+    await generateAIResponse(input);
+  };
+  // AI response testing
+  const generateGeminiResponse = async (prompt) => {
+    try {
+      const result = await model.generateContent(prompt);
+      return result.response.text(); // Return the actual response text
+    } catch (error) {
+      console.error("Generation error:", error);
+      return "Sorry, I couldn't process that request. Please try again."; // Return error message
+    }
   };
 
+  const generateAIResponse = async (userInput) => {
+    setIsLoading(true);
+
+    try {
+      // Get actual AI response
+      const aiResponse = await generateGeminiResponse(userInput);
+
+      // Add AI message to chat
+      const aiMessage = {
+        role: "assistant",
+        content: aiResponse,
+      };
+
+      setMessages((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      // Handle any unexpected errors
+      const errorMessage = {
+        role: "assistant",
+        content: "An error occurred while generating the response.",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false); // Always remove loading state
+    }
+  };
   return (
     <div className="h-full flex flex-col bg-[#1a162b] text-gray-100">
-      {/* Chat Messages */}
       <div
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto p-4 md:p-6 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent"
       >
         <div className="max-w-3xl mx-auto space-y-4">
-          {/* Welcome Message */}
           {messages.length === 0 && (
             <div className="text-center text-gray-500">
-              Start a conversation or select a chat from the sidebar
+              Start a conversation
             </div>
           )}
 
-          {/* Messages */}
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`flex ${
-                msg.role === "user" ? "justify-end" : "justify-start"
-              }`}
-            >
-              <div
-                className={`max-w-[80%] p-4 rounded-xl ${
-                  msg.role === "user"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-800 text-gray-100"
-                }`}
-              >
-                <p className="whitespace-pre-wrap">{msg.content}</p>
-              </div>
-            </div>
-          ))}
+          <Conversation messages={messages} />
 
-          {/* Loading Indicator */}
           {isLoading && (
             <div className="flex justify-start">
               <div className="p-4 bg-gray-800 rounded-xl">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100" />
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200" />
+                  {[1, 2, 3].map((dot) => (
+                    <div
+                      key={dot}
+                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                      style={{ animationDelay: `${dot * 100}ms` }}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
@@ -99,7 +114,6 @@ const ChatPage = () => {
         </div>
       </div>
 
-      {/* Input Area */}
       <div className="p-4 border-t border-gray-800 bg-[#1a162b]/50 backdrop-blur-lg">
         <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
           <div className="relative">

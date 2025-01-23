@@ -1,16 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   * {
     @apply m-0 p-0 box-border;
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
-  }
-
-  a {
-    @apply no-underline text-inherit;
+    @apply bg-background text-foreground font-sans antialiased;
   }
 }

@@ -6,10 +6,10 @@ import {
   SignUpPage,
   ChatPage,
   DashboardPage,
+  ErrorPage,
 } from "./screens";
 import { DashboardLayout, RootLayout } from "./layouts";
 import "./index.css";
-import ErrorPage from "./screens/ErrorPage";
 
 const router = createBrowserRouter([
   {

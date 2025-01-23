@@ -9,31 +9,40 @@ const DashboardPage = () => {
     {
       icon: "💬",
       title: "New Chat",
-      action: () => navigate("/dashboard/chats/:id"),
+      action: () => {
+        const newChatId = `chat-${Date.now()}`;
+        navigate(`/dashboard/chats/${newChatId}`);
+      },
     },
     {
       icon: "🖼️",
       title: "Image Analysis",
-      action: () => navigate("/dashboard/chats/:id"),
+      action: () => {
+        const newChatId = `image-${Date.now()}`;
+        navigate(`/dashboard/chats/${newChatId}`);
+      },
     },
     {
       icon: "💻",
       title: "Code Assistant",
-      action: () => navigate("/dashboard/chats/:id"),
+      action: () => {
+        const newChatId = `code-${Date.now()}`;
+        navigate(`/dashboard/chats/${newChatId}`);
+      },
     },
     {
       icon: "📚",
       title: "Knowledge Base",
-      action: () => navigate("/dashboard/chats/:id"),
+      action: () => {
+        const newChatId = `knowledge-${Date.now()}`;
+        navigate(`/dashboard/chats/${newChatId}`);
+      },
     },
   ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log(input);
     if (input.trim()) {
-      // Navigate to a new chat with the initial message"/dashboard/chats/:id",
       const newChatId = `chat-${Date.now()}`;
       navigate(
         `/dashboard/chats/${newChatId}?initialMessage=${encodeURIComponent(
@@ -44,7 +53,7 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-[#1a162b]">
+    <div className="h-full flex flex-col bg-[#1a162b] text-gray-100">
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
         <div className="text-center mb-8">
           <img
@@ -52,20 +61,20 @@ const DashboardPage = () => {
             alt="AI Assistant Logo"
             className="w-20 h-20 mx-auto mb-4 filter brightness-125"
           />
-          <h1 className="text-4xl bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             How can I help you today?
           </h1>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl mb-8">
+        <div className="grid grid-cols-2 gap-4 w-full max-w-2xl mb-8">
           {quickActions.map((action, index) => (
             <button
               key={index}
               onClick={action.action}
-              className="p-4 bg-gray-800 hover:bg-gray-700 rounded-xl transition-colors flex items-center gap-3"
+              className="p-4 bg-gray-800 hover:bg-gray-700 rounded-xl transition-colors flex items-center justify-center gap-3"
             >
               <span className="text-2xl">{action.icon}</span>
-              <span>{action.title}</span>
+              <span className="text-sm md:text-base">{action.title}</span>
             </button>
           ))}
         </div>

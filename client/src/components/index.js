@@ -1,3 +1,5 @@
 import ChatList from "./ChatList";
 import ChatSidebar from "./ChatSidebar";
-export { ChatList, ChatSidebar };
+import Header from "./Header";
+import Conversation from "./Conversation";
+export { ChatList, ChatSidebar, Header, Conversation };

@@ -11,8 +11,10 @@ const ChatSidebar = () => {
     const fetchChats = async () => {
       try {
         const mockChats = [
-          { id: "1", title: "Python Programming" },
-          { id: "2", title: "Web Development" },
+          { id: "1", title: "Development mode" },
+          { id: "2", title: "Testing phase" },
+          { id: "3", title: "Web Development" },
+          { id: "4", title: "Web Development" },
         ];
         setChats(mockChats);
         setIsLoading(false);
