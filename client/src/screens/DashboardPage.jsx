@@ -32,13 +32,13 @@ const DashboardPage = () => {
     e.preventDefault();
 
     console.log(input);
-    if (input.trim()) {
-      // Navigate to a new chat with the initial message
-      // const newChatId = `chat-${Date.now()}`;
-      // navigate(
-      //   `/chat/${newChatId}?initialMessage=${encodeURIComponent(input)}`
-      // );
-    }
+    // if (input.trim()) {
+    // Navigate to a new chat with the initial message
+    // const newChatId = `chat-${Date.now()}`;
+    // navigate(
+    //   `/chat/${newChatId}?initialMessage=${encodeURIComponent(input)}`
+    // );
+    // }
   };
 
   return (

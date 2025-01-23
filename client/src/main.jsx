@@ -9,6 +9,7 @@ import {
 } from "./screens";
 import { DashboardLayout, RootLayout } from "./layouts";
 import "./index.css";
+import ErrorPage from "./screens/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/sign-up/*",
         element: <SignUpPage />,
+      },
+      {
+        path: "/*",
+        element: <ErrorPage />,
       },
       {
         element: <DashboardLayout />,
