@@ -27,7 +27,7 @@ const RootLayout = () => {
         },
       }}
     >
-      <div className="h-screen flex flex-col py-4 px-4 md:px-8 lg:px-16 bg-gradient-to-b from-[#0e0c16] to-[#1a162b]">
+      <div className="h-screen flex flex-col py-4 px-4 md:px-5 lg:px-12 bg-gradient-to-b from-[#0e0c16] to-[#1a162b]">
         <header className="flex items-center justify-between gap-4 flex-wrap">
           <Link
             to="/"
@@ -74,7 +74,7 @@ const RootLayout = () => {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto pt-6 md:pt-8">
+        <main className="flex-1 pt-6 md:pt-2">
           <div className="mx-auto h-full max-w-7xl">
             <Outlet />
           </div>

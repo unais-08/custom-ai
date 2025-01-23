@@ -1,66 +1,56 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
+// ChatList.jsx
 const ChatList = () => {
   const [isPending, setIsPending] = useState(true);
+  const [data, setData] = useState([]);
+
   return (
-    <div className="flex flex-col h-full p-4 gap-4">
-      <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">
-        DASHBOARD
-      </span>
+    <div className="h-full flex flex-col p-2 gap-4 bg-gray-900/80">
+      {/* New Chat Button */}
+      <button className="w-full p-3 mb-2 rounded-lg bg-gray-800 hover:bg-gray-700/50 border border-gray-700 transition-colors">
+        <span className="flex items-center gap-2 text-gray-300">
+          <span>+</span> New Chat
+        </span>
+      </button>
 
-      <div className="flex flex-col gap-2">
-        <Link
-          to="/dashboard"
-          className="px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm"
-        >
-          Create a new Chat
-        </Link>
-        <Link
-          to="/"
-          className="px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm"
-        >
-          Explore Lama AI
-        </Link>
-        <Link
-          to="/"
-          className="px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm"
-        >
-          Contact
-        </Link>
+      {/* Chat History */}
+      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700">
+        <div className="space-y-1">
+          {isPending ? (
+            <div className="p-3 text-center text-gray-500 animate-pulse">
+              Loading history...
+            </div>
+          ) : data.length > 0 ? (
+            data.map((chat) => (
+              <Link
+                key={chat.id}
+                to={`/chat/${chat.id}`}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800/50 transition-colors text-gray-300"
+              >
+                <span className="text-gray-400">💬</span>
+                <span className="truncate">{chat.title || "New Chat"}</span>
+              </Link>
+            ))
+          ) : (
+            <div className="p-3 text-gray-500 text-center">
+              No chat history found
+            </div>
+          )}
+        </div>
       </div>
 
-      <hr className="border-0 h-px bg-gray-400 bg-opacity-10 rounded-sm my-5" />
-
-      <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">
-        RECENT CHATS
-      </span>
-
-      <div className="flex flex-col gap-2 overflow-auto">
-        {isPending ? (
-          <span className="text-gray-500 text-sm">Loading...</span>
-        ) : error ? (
-          <span className="text-red-400 text-sm">Something went wrong!</span>
-        ) : (
-          data?.map((chat) => (
-            <Link
-              to={`/dashboard/chats/${chat._id}`}
-              key={chat._id}
-              className="px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm truncate"
-            >
-              {chat.title}
-            </Link>
-          ))
-        )}
-      </div>
-
-      <hr className="border-0 h-px bg-gray-400 bg-opacity-10 rounded-sm my-5" />
-      <div className="mt-auto flex items-center gap-3 p-3 bg-gray-800 rounded-lg">
-        <img src="/logo.png" alt="Pro Version" className="w-6 h-6" />
-        <div className="flex flex-col">
-          <span className="text-sm font-semibold">Upgrade to Lama AI Pro</span>
-          <span className="text-xs text-gray-500">
-            Get unlimited access to all features
-          </span>
+      {/* Account Section */}
+      <div className="mt-auto border-t border-gray-800 pt-4">
+        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-800/50 transition-colors cursor-pointer">
+          <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+            <span className="text-sm">U</span>
+          </div>
+          <div>
+            <p className="text-sm font-medium text-gray-100">Username</p>
+            <p className="text-xs text-gray-400">Free Plan</p>
+          </div>
         </div>
       </div>
     </div>

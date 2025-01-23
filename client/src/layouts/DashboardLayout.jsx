@@ -1,13 +1,22 @@
-import { ChatList } from "../components";
+// DashboardLayout.jsx
 import { Outlet } from "react-router-dom";
+import { ChatList } from "../components";
+
 const DashboardLayout = () => {
   return (
-    <div className="flex gap-12 pt-5 h-full md:gap-8 sm:gap-4 sm:flex-col">
-      <div className="flex-1 min-w-[260px] sm:min-w-full">
+    <div className="flex h-screen bg-gray-900 text-gray-100">
+      {/* Sidebar */}
+      <div className="w-64 min-w-[220px] border-r border-gray-700 bg-gray-900/95 backdrop-blur-lg">
         <ChatList />
       </div>
-      <div className="flex-[4] bg-[#12101b] rounded-xl p-6 sm:p-4 overflow-y-auto">
-        <Outlet />
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <main className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+          <div className="max-w-4xl mx-auto p-4 md:p-6 h-full flex flex-col">
+            <Outlet />
+          </div>
+        </main>
       </div>
     </div>
   );

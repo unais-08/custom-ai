@@ -1,67 +1,87 @@
-import React from "react";
-
+// DashboardPage.jsx
 const DashboardPage = () => {
-  function handleSubmit(e) {
-    // Add your code here
+  const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Submitted");
-  }
+  };
+
   return (
-    <div className="flex flex-col items-center h-full">
-      {/* Texts Section */}
-      <div className="flex-1 flex flex-col items-center justify-center w-1/2 gap-12 md:w-full md:px-4">
-        {/* Logo */}
-        <div className="flex items-center gap-5 opacity-20">
-          <img src="/logo.png" alt="Logo" className="w-16 h-16" />
-          <h1 className="text-6xl bg-gradient-to-r from-blue-600 to-rose-500 text-transparent bg-clip-text">
-            LAMA AI
+    <div className="flex-1 flex flex-col justify-between">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col items-center justify-center">
+        {/* Logo Header */}
+        <div className="flex flex-col items-center mb-8 opacity-75">
+          <img
+            src="/logo.png"
+            alt="LAMA AI Logo"
+            className="w-16 h-16 mb-4 filter brightness-125"
+          />
+          <h1 className="text-3xl md:text-4xl bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            How can I help you today?
           </h1>
         </div>
 
-        {/* Options */}
-        <div className="flex w-full justify-between gap-12 md:flex-col">
+        {/* Quick Action Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
           {[
-            { icon: "/chat.png", text: "Create a New Chat" },
-            { icon: "/image.png", text: "Analyze Images" },
-            { icon: "/code.png", text: "Help me with my Code" },
+            { icon: "💬", title: "New Chat", desc: "Start a new conversation" },
+            {
+              icon: "🖼️",
+              title: "Image Analysis",
+              desc: "Upload and analyze images",
+            },
+            { icon: "💻", title: "Code Help", desc: "Get coding assistance" },
+            {
+              icon: "📚",
+              title: "Knowledge Base",
+              desc: "Explore documentation",
+            },
           ].map((item, index) => (
-            <div
+            <button
               key={index}
-              className="flex flex-col gap-2.5 p-5 border border-gray-600 rounded-xl flex-1 hover:bg-gray-800 transition-colors"
+              className="p-4 text-left rounded-xl bg-gray-800 hover:bg-gray-700/50 transition-all border border-gray-700"
             >
-              <img
-                src={item.icon}
-                alt={item.text}
-                className="w-10 h-10 object-cover"
-              />
-              <span className="text-sm font-light">{item.text}</span>
-            </div>
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">{item.icon}</span>
+                <div>
+                  <h3 className="text-gray-100 font-medium">{item.title}</h3>
+                  <p className="text-sm text-gray-400">{item.desc}</p>
+                </div>
+              </div>
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Form Container */}
-      <div className="mt-auto w-1/2 bg-gray-800 rounded-xl md:w-full">
-        <form
-          onSubmit={handleSubmit}
-          className="flex w-full items-center justify-between gap-5 p-4"
-        >
+      {/* Input Container */}
+      <div className="mt-8 w-full max-w-3xl mx-auto">
+        <form onSubmit={handleSubmit} className="relative">
           <input
             type="text"
-            name="text"
-            placeholder="Ask me anything..."
-            className="bg-transparent border-none outline-none flex-1 p-5 text-gray-100 placeholder-gray-400 text-lg"
+            placeholder="Message LAMA AI..."
+            className="w-full p-4 pr-14 rounded-xl bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 outline-none transition-all"
           />
           <button
             type="submit"
-            className="bg-gray-700 rounded-full p-2.5 hover:bg-blue-600 transition-colors"
+            className="absolute right-2 top-2 p-2 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors"
           >
-            <img src="/arrow.png" alt="Submit" className="w-4 h-4" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+              />
+            </svg>
           </button>
         </form>
       </div>
     </div>
   );
 };
-
 export default DashboardPage;
