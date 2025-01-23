@@ -29,7 +29,7 @@ const ChatSidebar = () => {
   const handleNewChat = () => {
     // Generate a new chat ID and navigate to it
     const newChatId = `chat-${Date.now()}`;
-    navigate(`/chat/${newChatId}`);
+    navigate(`/dashboard/chats/${newChatId}`);
   };
 
   return (

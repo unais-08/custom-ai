@@ -15,7 +15,7 @@ const Header = () => {
             className="w-8 h-8 transition-transform group-hover:scale-110"
           />
           <span className="text-lg bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            AI Assistant
+            Custom AI
           </span>
         </Link>
 

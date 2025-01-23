@@ -34,7 +34,7 @@ const RootLayout = () => {
     >
       <div className="h-screen flex flex-col bg-gradient-to-b from-[#0e0c16] to-[#1a162b] text-gray-100">
         <Header />
-        <main className="flex-1 overflow-y">
+        <main className="flex-1 overflow-hidden">
           <Outlet />
         </main>
       </div>

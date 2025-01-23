@@ -9,22 +9,22 @@ const DashboardPage = () => {
     {
       icon: "💬",
       title: "New Chat",
-      action: () => navigate("/chat/new"),
+      action: () => navigate("/dashboard/chats/:id"),
     },
     {
       icon: "🖼️",
       title: "Image Analysis",
-      action: () => navigate("/image-analysis"),
+      action: () => navigate("/dashboard/chats/:id"),
     },
     {
       icon: "💻",
       title: "Code Assistant",
-      action: () => navigate("/code-help"),
+      action: () => navigate("/dashboard/chats/:id"),
     },
     {
       icon: "📚",
       title: "Knowledge Base",
-      action: () => navigate("/knowledge"),
+      action: () => navigate("/dashboard/chats/:id"),
     },
   ];
 
@@ -32,13 +32,15 @@ const DashboardPage = () => {
     e.preventDefault();
 
     console.log(input);
-    // if (input.trim()) {
-    // Navigate to a new chat with the initial message
-    // const newChatId = `chat-${Date.now()}`;
-    // navigate(
-    //   `/chat/${newChatId}?initialMessage=${encodeURIComponent(input)}`
-    // );
-    // }
+    if (input.trim()) {
+      // Navigate to a new chat with the initial message"/dashboard/chats/:id",
+      const newChatId = `chat-${Date.now()}`;
+      navigate(
+        `/dashboard/chats/${newChatId}?initialMessage=${encodeURIComponent(
+          input
+        )}`
+      );
+    }
   };
 
   return (
