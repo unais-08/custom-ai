@@ -10,7 +10,7 @@ const ChatPage = () => {
   const { chatId } = useParams();
   const navigate = useNavigate();
   const chatContainerRef = useRef(null);
-  console.log(chatId);
+
   const [state, setState] = useState({
     messages: [],
     input: "",
@@ -47,7 +47,7 @@ const ChatPage = () => {
 
       try {
         updateState({ isLoadingChat: true });
-        const chatDetails = await chatService.getUserChats(chatId);
+        const chatDetails = await chatService.getChatDetails(chatId);
         console.log(chatDetails);
         if (isMounted) {
           updateState({
@@ -61,14 +61,14 @@ const ChatPage = () => {
       }
     };
     loadChat();
-    // return () => {
-    //   isMounted = false;
-    // };
+    return () => {
+      isMounted = false;
+    };
   }, [chatId, user, navigate]);
 
   const mapMessage = (msg) => ({
     role: msg.role === "model" ? "assistant" : "user",
-    content: msg.text || "Empty message",
+    content: msg.parts?.[0]?.text || "Empty message",
   });
 
   const updateState = (newState) => {

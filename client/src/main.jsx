@@ -1,5 +1,9 @@
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import {
   HomePage,
   SignInPage,
@@ -28,10 +32,6 @@ const router = createBrowserRouter([
         element: <SignUpPage />,
       },
       {
-        path: "/*",
-        element: <ErrorPage />,
-      },
-      {
         element: <DashboardLayout />,
         children: [
           {
@@ -39,10 +39,27 @@ const router = createBrowserRouter([
             element: <DashboardPage />,
           },
           {
-            path: "/dashboard/chats/:id",
-            element: <ChatPage />,
+            path: "/dashboard/chats",
+            children: [
+              {
+                index: true,
+                element: <Navigate to="new" replace />,
+              },
+              {
+                path: "new",
+                element: <ChatPage />,
+              },
+              {
+                path: ":chatId",
+                element: <ChatPage />,
+              },
+            ],
           },
         ],
+      },
+      {
+        path: "/*",
+        element: <ErrorPage />,
       },
     ],
   },
