@@ -4,20 +4,22 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api/v1";
 
 const chatService = {
-  createChat: async (userId, initialMessage) => {
+  createChat: async (userId, initialMessage, title) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/chats`, {
-        title: initialMessage.substring(0, 15),
         userId,
         initialMessage,
+        title: title || initialMessage.substring(0, 50), // Use custom title or generate from initial message
       });
       return response.data;
     } catch (error) {
-      console.error("Error creating chat:", error);
-      throw error;
+      console.error(
+        "Error creating chat:",
+        error.response?.data || error.message
+      );
+      throw new Error("Failed to create new chat");
     }
   },
-
   addMessageToChat: async (chatId, message) => {
     try {
       const response = await axios.post(

@@ -43,8 +43,16 @@ const ChatSidebar = () => {
     try {
       setState((prev) => ({ ...prev, isCreatingNew: true }));
 
-      // Create empty chat
-      const newChat = await chatService.createChat(user.id);
+      // Generate a more meaningful title or use a default one
+
+      const initialMessage = "Hello, let's start a new chat!";
+      const title = `Chat ${state.chats.length + 1}`;
+      // Create new chat with a custom title
+      const newChat = await chatService.createChat(
+        user.id,
+        initialMessage,
+        title
+      );
 
       // Update local state
       setState((prev) => ({
@@ -60,7 +68,6 @@ const ChatSidebar = () => {
       setState((prev) => ({ ...prev, isCreatingNew: false }));
     }
   };
-
   const formatChatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
