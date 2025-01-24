@@ -31,12 +31,16 @@ const HomePage = () => {
         >
           Custom AI
         </h1>
-        <h2 className="text-xl md:text-2xl font-semibold text-gray-100">
+        <h2 className="text-xl md:text-2xl font-semibold text-gray-100 mt-4">
           Supercharge your creativity and productivity
         </h2>
-        <p className="text-base md:text-md text-gray-300 max-w-2xl">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Placeat sint
-          dolorem doloribus, architecto dolor.
+        <p className="text-base md:text-md text-gray-300 max-w-2xl mt-4">
+          "The future belongs to those who believe in the beauty of their
+          dreams." – Eleanor Roosevelt
+        </p>
+        <p className="text-sm md:text-md text-gray-400 max-w-2xl mt-2">
+          ⚠️ Remember: To go back to the home page, click on the logo in the
+          top-left corner.
         </p>
         <Link
           to="/dashboard"

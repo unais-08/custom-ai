@@ -21,6 +21,9 @@ const Header = () => {
           <span className="text-lg bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             Custom AI
           </span>
+          <span className="text-xs text-gray-400 transition-opacity">
+            Go Home
+          </span>
         </Link>
 
         <div className="flex items-center space-x-4">
