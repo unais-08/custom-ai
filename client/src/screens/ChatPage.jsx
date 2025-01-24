@@ -1,15 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import model from "../libs/gemini";
 import { Conversation } from "../components";
 import chatService from "../libs/chat_service";
+import { toast } from "react-toastify";
 
 const ChatPage = () => {
   const { user } = useUser();
   const { chatId } = useParams();
   const navigate = useNavigate();
   const chatContainerRef = useRef(null);
+  const isMountedRef = useRef(true);
 
   const [state, setState] = useState({
     messages: [],
@@ -18,62 +20,62 @@ const ChatPage = () => {
     isLoadingChat: true,
   });
 
-  // Destructure state for cleaner access
   const { messages, input, isGenerating, isLoadingChat } = state;
 
   // Scroll to bottom when messages change
   useEffect(() => {
-    const scroll = () => {
-      if (chatContainerRef.current) {
-        chatContainerRef.current.scrollTop =
-          chatContainerRef.current.scrollHeight;
-      }
-    };
-
-    // Add slight delay for smooth scroll
-    const timeout = setTimeout(scroll, 50);
-    return () => clearTimeout(timeout);
-  }, [messages]);
-  // Add this useEffect
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadChat = async () => {
-      if (!chatId || !user) {
-        if (isMounted) updateState({ messages: [], isLoadingChat: false });
-        return;
-      }
-
-      try {
-        updateState({ isLoadingChat: true });
-        const chatDetails = await chatService.getChatDetails(chatId);
-        console.log(chatDetails);
-        if (isMounted) {
-          updateState({
-            messages: chatDetails.messages.map(mapMessage),
-            isLoadingChat: false,
+    if (messages.length > 0) {
+      const scrollToBottom = () => {
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTo({
+            top: chatContainerRef.current.scrollHeight,
+            behavior: "smooth",
           });
         }
-      } catch (error) {
-        console.error("Failed to load chat:", error);
-        if (isMounted) navigate("/dashboard/chats");
+      };
+
+      const timeoutId = setTimeout(scrollToBottom, 100);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [messages]);
+
+  // Load chat history
+  const loadChat = useCallback(async () => {
+    if (!chatId || !user) return;
+
+    try {
+      setState((prev) => ({ ...prev, isLoadingChat: true }));
+
+      const chatDetails = await chatService.getChatDetails(chatId);
+
+      if (isMountedRef.current) {
+        setState((prev) => ({
+          ...prev,
+          messages: chatDetails.messages.map(mapMessage),
+          isLoadingChat: false,
+        }));
       }
-    };
-    loadChat();
-    return () => {
-      isMounted = false;
-    };
+    } catch (error) {
+      console.error("Failed to load chat:", error);
+      toast.error("Failed to load chat history");
+      navigate("/dashboard/chats");
+    }
   }, [chatId, user, navigate]);
+
+  // Trigger chat load on chatId or user change
+  useEffect(() => {
+    isMountedRef.current = true;
+    loadChat();
+
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [loadChat]);
 
   const mapMessage = (msg) => ({
     role: msg.role === "model" ? "assistant" : "user",
     content: msg.parts?.[0]?.text || "Empty message",
   });
-
-  const updateState = (newState) => {
-    setState((prev) => ({ ...prev, ...newState }));
-  };
 
   const generateGeminiResponse = async (prompt) => {
     try {
@@ -81,6 +83,7 @@ const ChatPage = () => {
       return result.response.text();
     } catch (error) {
       console.error("Generation error:", error);
+      toast.error("Failed to generate response");
       return "Sorry, I couldn't process that request. Please try again.";
     }
   };
@@ -93,42 +96,65 @@ const ChatPage = () => {
     let currentChat = chatId;
 
     try {
-      updateState({ input: "", isGenerating: true });
-      const newMessages = [...messages, { role: "user", content: userInput }];
-      updateState({ messages: newMessages });
+      // Clear input and show loading state
+      setState((prev) => ({
+        ...prev,
+        input: "",
+        isGenerating: true,
+        messages: [...prev.messages, { role: "user", content: userInput }],
+      }));
+
+      let newChatId = currentChat;
 
       // Create new chat if needed
       if (!currentChat) {
         const newChat = await chatService.createChat(user.id, userInput);
-        currentChat = newChat._id;
-        navigate(`/dashboard/chats/${newChat._id}`);
+        newChatId = newChat._id;
+        navigate(`/dashboard/chats/${newChatId}`);
       }
 
-      // Save user message
-      await chatService.addMessageToChat(currentChat, {
-        role: "user",
-        text: userInput,
-      });
+      // Save user message to backend
+      if (currentChat) {
+        await chatService.addMessageToChat(currentChat, {
+          role: "user",
+          text: userInput,
+        });
+      }
 
       // Generate AI response
       const aiResponse = await generateGeminiResponse(userInput);
-      const aiMessage = { role: "assistant", content: aiResponse };
 
-      // Update UI and save AI response
-      updateState({ messages: [...newMessages, aiMessage] });
-      await chatService.addMessageToChat(currentChat, {
+      // Update UI with AI response
+      setState((prev) => ({
+        ...prev,
+        messages: [
+          ...prev.messages,
+          { role: "assistant", content: aiResponse },
+        ],
+      }));
+
+      // Save AI response to backend
+      await chatService.addMessageToChat(newChatId, {
         role: "model",
         text: aiResponse,
       });
+
+      toast.success("Message sent successfully");
     } catch (error) {
       console.error("Error:", error);
-      const errorMessage = {
-        role: "assistant",
-        content: "⚠️ Failed to process your request. Please try again.",
-      };
-      updateState({ messages: [...messages, errorMessage] });
+      toast.error("Failed to send message");
+
+      // Rollback optimistic updates
+      setState((prev) => ({
+        ...prev,
+        messages: prev.messages.filter((msg) => msg.content !== userInput),
+        input: userInput,
+      }));
     } finally {
-      updateState({ isGenerating: false });
+      setState((prev) => ({
+        ...prev,
+        isGenerating: false,
+      }));
     }
   };
 
@@ -182,7 +208,9 @@ const ChatPage = () => {
               <input
                 type="text"
                 value={input}
-                onChange={(e) => updateState({ input: e.target.value })}
+                onChange={(e) =>
+                  setState((prev) => ({ ...prev, input: e.target.value }))
+                }
                 placeholder="Type your message..."
                 className="w-full p-4 pr-14 rounded-xl bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all disabled:opacity-75"
                 disabled={isGenerating}
@@ -204,7 +232,7 @@ const ChatPage = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M13 5l7 7-7 7M5 5l7 7-7 7"
+                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                   />
                 </svg>
               </button>
