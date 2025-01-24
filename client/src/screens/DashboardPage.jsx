@@ -10,7 +10,7 @@ const DashboardPage = () => {
       icon: "💬",
       title: "New Chat",
       action: () => {
-        const newChatId = `chat-${Date.now()}`;
+        const newChatId = `${Date.now()}`;
         navigate(`/dashboard/chats/${newChatId}`);
       },
     },

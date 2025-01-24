@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { TypeAnimation } from "react-type-animation";
+import { useAuth } from "@clerk/clerk-react";
 
 const HomePage = () => {
   const [typingStatus, setTypingStatus] = useState("human1");
@@ -11,6 +12,7 @@ const HomePage = () => {
                    px-4 md:px-8 lg:px-16 py-8"
     >
       {/* Orbital Background Image */}
+
       <img
         src="/orbital.png"
         alt="Decorative background"
