@@ -13,7 +13,10 @@ const ChatSidebar = () => {
     isCreatingNew: false,
   });
   const navigate = useNavigate();
-
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const toggleMobileSidebar = () => {
+    setIsMobileSidebarOpen(!isMobileSidebarOpen);
+  };
   const fetchChats = async () => {
     if (!user) return;
 
@@ -79,58 +82,95 @@ const ChatSidebar = () => {
   };
 
   return (
-    <aside className="w-64 bg-gray-900 p-4 border-r border-gray-800 flex flex-col">
+    <>
+      {/* Mobile Hamburger Button */}
       <button
-        onClick={handleNewChat}
-        disabled={state.isCreatingNew}
-        className="w-full mb-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg 
-                   transition-colors disabled:opacity-70 disabled:cursor-not-allowed
-                   flex items-center justify-center gap-2"
+        onClick={toggleMobileSidebar}
+        className="md:hidden fixed top-4 left-4 z-50 bg-gray-800 p-2 rounded-md"
       >
-        {state.isCreatingNew ? (
-          <>
-            <Spinner size="sm" />
-            Creating...
-          </>
-        ) : (
-          "+ New Chat"
-        )}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6 text-white"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
       </button>
 
-      <div className="overflow-y-auto flex-1">
-        {state.isLoading ? (
-          <div className="flex items-center justify-center h-full">
-            <Spinner size="md" />
-          </div>
-        ) : state.chats.length > 0 ? (
-          <ul className="space-y-1">
-            {state.chats.map((chat) => (
-              <li key={chat._id}>
-                <Link
-                  to={`/dashboard/chats/${chat._id}`}
-                  className="block p-3 rounded-lg hover:bg-gray-800 transition-colors
-                             group relative overflow-hidden"
-                >
-                  <p className="text-gray-300 truncate pr-8">
-                    {chat.title || "New Chat"}
-                  </p>
-                  <time
-                    className="text-xs text-gray-500 mt-1 block"
-                    dateTime={chat.createdAt}
+      {/* Sidebar with Mobile Overlay */}
+      <div
+        className={`fixed inset-0 z-40 bg-black/50 md:hidden 
+          ${isMobileSidebarOpen ? "block" : "hidden"}`}
+        onClick={toggleMobileSidebar}
+      />
+
+      <aside
+        className={`
+          fixed top-0 left-0 w-64 h-full bg-gray-900 p-4 border-r border-gray-800 
+          transform transition-transform duration-300 ease-in-out z-50
+          md:static md:translate-x-0 md:block
+          ${isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
+        <button
+          onClick={handleNewChat}
+          disabled={state.isCreatingNew}
+          className="w-full mb-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg
+                     transition-colors disabled:opacity-70 disabled:cursor-not-allowed
+                     flex items-center justify-center gap-2"
+        >
+          {state.isCreatingNew ? (
+            <>
+              <Spinner size="sm" />
+              Creating...
+            </>
+          ) : (
+            "+ New Chat"
+          )}
+        </button>
+
+        <div className="overflow-y-auto flex-1">
+          {state.isLoading ? (
+            <div className="flex items-center justify-center h-full">
+              <Spinner size="md" />
+            </div>
+          ) : state.chats.length > 0 ? (
+            <ul className="space-y-1">
+              {state.chats.map((chat) => (
+                <li key={chat._id} onClick={toggleMobileSidebar}>
+                  <Link
+                    to={`/dashboard/chats/${chat._id}`}
+                    className="block p-3 rounded-lg hover:bg-gray-800 transition-colors
+                               group relative overflow-hidden"
                   >
-                    {formatChatDate(chat.createdAt)}
-                  </time>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="text-center p-4 text-gray-500">
-            No previous chats found
-          </div>
-        )}
-      </div>
-    </aside>
+                    <p className="text-gray-300 truncate pr-8">
+                      {chat.title || "New Chat"}
+                    </p>
+                    <time
+                      className="text-xs text-gray-500 mt-1 block"
+                      dateTime={chat.createdAt}
+                    >
+                      {formatChatDate(chat.createdAt)}
+                    </time>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-center p-4 text-gray-500">
+              No previous chats found
+            </div>
+          )}
+        </div>
+      </aside>
+    </>
   );
 };
 

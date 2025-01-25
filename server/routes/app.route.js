@@ -7,7 +7,11 @@ import {
   getChatDetails,
 } from "../controllers/app.controller.js";
 const router = express.Router();
-
+router.get("/", (req, res) => {
+  res.send(
+    `<h2 style="text-align:center;padding:1rem">server is listening</h2>`
+  );
+});
 // Create a new chat session
 router.post("/chats", createChat);
 
