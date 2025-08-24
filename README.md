@@ -1,1 +1,1 @@
-# custom-ai
+# mini-gpt

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { TypeAnimation } from "react-type-animation";
-import { useAuth } from "@clerk/clerk-react";
 
 const HomePage = () => {
   const [typingStatus, setTypingStatus] = useState("human1");
@@ -29,7 +28,7 @@ const HomePage = () => {
           className="text-5xl md:text-6xl lg:text-[90px] bg-gradient-to-r from-[#217bfe] 
                       to-[#e55571] text-transparent bg-clip-text leading-tight"
         >
-          Custom AI
+          Mini GPT
         </h1>
         <h2 className="text-xl md:text-2xl font-semibold text-gray-100 mt-4">
           Supercharge your creativity and productivity

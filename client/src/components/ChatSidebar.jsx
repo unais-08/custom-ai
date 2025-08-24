@@ -115,7 +115,9 @@ const ChatSidebar = () => {
         className={`
           fixed top-0 left-0 w-64 h-full bg-gray-900 p-4 border-r border-gray-800 
           transform transition-transform duration-300 ease-in-out z-50
-          md:static md:translate-x-0 md:block
+          md:static md:translate-x-0 md:block overflow-y-auto
+          scrollbar-thin scrollbar-track-gray-800 scrollbar-thumb-gray-600 
+          hover:scrollbar-thumb-gray-500
           ${isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
@@ -136,7 +138,7 @@ const ChatSidebar = () => {
           )}
         </button>
 
-        <div className="overflow-y-auto flex-1">
+        <div className="overflow-y-auto flex-1 scrollbar-thin scrollbar-track-gray-800 scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500">
           {state.isLoading ? (
             <div className="flex items-center justify-center h-full">
               <Spinner size="md" />

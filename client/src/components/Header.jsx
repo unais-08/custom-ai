@@ -1,10 +1,7 @@
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
     <header className="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -15,11 +12,11 @@ const Header = () => {
         >
           <img
             src="/primary-logo.webp"
-            alt="Custom AI Logo"
+            alt="Mini GPT Logo"
             className="w-9 h-9 transition-transform group-hover:scale-110"
           />
           <span className="text-lg bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Custom AI
+            Mini GPT
           </span>
           <span className="text-xs text-gray-400 transition-opacity">
             Go Home

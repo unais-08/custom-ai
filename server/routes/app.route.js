@@ -1,5 +1,5 @@
 import express from "express";
-import { requireAuth, getAuth } from "@clerk/express";
+
 import {
   createChat,
   addMessageToChat,

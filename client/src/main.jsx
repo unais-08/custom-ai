@@ -11,7 +11,7 @@ import {
   ChatPage,
   DashboardPage,
   ErrorPage,
-} from "./screens";
+} from "./pages";
 import { DashboardLayout, RootLayout } from "./layouts";
 import "./index.css";
 
